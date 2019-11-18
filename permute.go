@@ -13,6 +13,8 @@ import (
 
 var dictOnly = flag.Bool("dictonly", true, "Only return permutations from the dictionary")
 var dict = flag.String("dict", "/usr/share/dict/words", "Path to dictionary file")
+var minLength = flag.Int("min-length", 0, "Return only words greater than N characters")
+var maxLength = flag.Int("max-length", 20, "Return only words greater than N characters")
 var anyLength = flag.Bool("any-length", false, "Generate combos of any nonzero subset length")
 
 var dictionary = map[string]struct{}{}
@@ -83,6 +85,9 @@ func main() {
 		}
 		for _, word := range permutations(letters) {
 			if *dictOnly && !isDictWord(string(word)) {
+				continue
+			}
+			if len(word) < *minLength || len(word) > *maxLength {
 				continue
 			}
 			fmt.Println(string(word))
